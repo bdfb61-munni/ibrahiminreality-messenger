@@ -31,10 +31,36 @@ const errorText = document.getElementById("error");
 loginBtn.onclick = async () => {
   try {
     await signInWithEmailAndPassword(auth, email.value, password.value);
-    errorText.innerText = "";
+    errorText.innerText = "Login Success 🎉";
   } catch (e) {
-    errorText.innerText = "Login Failed ❌";
+    errorText.innerText = e.message;
   }
+};
+
+registerBtn.onclick = async () => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value);
+    errorText.innerText = "Register Success 🎉";
+    console.log(userCredential);
+  } catch (e) {
+    errorText.innerText = e.message;
+  }
+};
+
+logoutBtn.onclick = async () => {
+  await signOut(auth);
+};
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    authBox.classList.add("hidden");
+    welcomeBox.classList.remove("hidden");
+    userInfo.innerText = "Logged in as: " + user.email;
+  } else {
+    authBox.classList.remove("hidden");
+    welcomeBox.classList.add("hidden");
+  }
+});  }
 };
 
 registerBtn.onclick = async () => {
